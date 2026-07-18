@@ -1,0 +1,35 @@
+[package]
+name = "rbatis-mayhem-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+# The old fork's `decode` harness fuzzed rbdc-pg's PgValue decode path via in-tree
+# path deps (rbdc-pg/, rbs/). Upstream has since moved those crates out of this
+# repository (they are published from github.com/rbatis/rbdc), so the same code
+# path is now driven through the same-versioned crates.io releases rbatis itself
+# depends on (Cargo.toml: rbs = "4", and the rbdc family at "4.9").
+[dependencies.rbdc-pg]
+version = "4.9"
+
+[dependencies.rbs]
+version = "4"
+
+# Prevent this from interfering with the rbatis workspace
+[workspace]
+members = ["."]
+
+[profile.release]
+debug = 1
+
+[[bin]]
+name = "decode"
+path = "fuzz_targets/decode.rs"
+test = false
+doc = false
