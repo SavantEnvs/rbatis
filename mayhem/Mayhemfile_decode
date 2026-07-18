@@ -1,0 +1,6 @@
+project: savantenvs/rbatis
+target: decode
+
+cmds:
+  - cmd: /mayhem/decode
+    libfuzzer: true
